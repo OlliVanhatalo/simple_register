@@ -1,0 +1,64 @@
+Kirjautumis template:
+https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php
+
+create table vieras (
+   vid	serial primary key,
+   mess	varchar(500) not null,
+   kirj	varchar(20) not null,
+   aika	time,
+   pvm	date
+);
+
+
+grant all on vieras to "www-data";
+
+grant all on vieras_vid_seq to "www-data";
+
+grant all on users to "www-data";
+
+grant all on message to "www-data";
+
+grant all on thread to "www-data";
+
+grant all on message_messageID_seq to "www-data";
+
+
+Tasosta 3. eteenpäin tarvittavat taulut
+
+CREATE TABLE writer (
+    writerID int NOT NULL PRIMARY KEY,
+    name varchar(30) NOT NULL,
+    pass varchar(30) NOT NULL
+);
+
+Tämä on uudempi
+CREATE TABLE users (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE message (
+    messageID int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id int NOT NULL,
+    CONSTRAINT `fk_message_users`
+      FOREIGN KEY (id) REFERENCES users (id),
+    mess  varchar(500) NOT NULL,
+    time  time,
+    date  date 
+);
+
+CREATE TABLE thread (
+    messageID int NOT NULL,
+    CONSTRAINT `fk_thread_message`
+      FOREIGN KEY (messageID) REFERENCES message (messageID),
+    threadID int NOT NULL, 
+);
+
+CREATE TABLE quote (
+    guoteID int NOT NULL PRIMARY KEY,
+    messageID int NOT NULL,
+    CONSTRAINT `fk_quote_message`
+      FOREIGN KEY (messageID) REFERENCES message (messageID) 
+);
