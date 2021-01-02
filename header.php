@@ -9,7 +9,15 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 }
 ?>
 
-<html><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="content.css">
+    <title>DJ Incogniton vieraskirja</title>
+</head>
+<body>
 <h1>DJ Incogniton vieraskirja</h1>
 <br><br>
 

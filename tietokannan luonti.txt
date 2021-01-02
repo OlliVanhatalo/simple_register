@@ -54,6 +54,7 @@ CREATE TABLE thread (
     CONSTRAINT `fk_thread_message`
       FOREIGN KEY (messageID) REFERENCES message (messageID),
     threadID int NOT NULL, 
+    parentStatus BOOL NOT NULL;
 );
 
 CREATE TABLE quote (

@@ -2,7 +2,7 @@
 
 //Tuodaan tietokantayhteyden luonti. 
 require_once "config.php";
-include 'yla.php';
+include 'header.php';
 include 'consoleLog.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          // suorita lis�yskysely
          $stmt1->execute();
          //tässä häikkää
-         // $last_id = $pdo->lastInsertId();
+         $last_id = $pdo->lastInsertId();
+         console_log($last_id);
          //tämä ok
          $stmt2->execute();
       }

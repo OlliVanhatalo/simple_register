@@ -1,5 +1,5 @@
 <?php
-include 'yla.php';
+include 'header.php';
 require_once "config.php";
 ?>
 
@@ -13,9 +13,9 @@ require_once "config.php";
 
 
 <form method='get'>
-  <input type='submit' name='kys' value='Uusimmat ensin'>
-  <input type='submit' name='kys' value='Vanhimmat ensin'>
-  <input type='submit' name='kys' value='Kirjoittajan mukaan'>
+  <input type='submit' name='order' value='Uusimmat ensin'>
+  <input type='submit' name='order' value='Vanhimmat ensin'>
+  <input type='submit' name='order' value='Kirjoittajan mukaan'>
 </form>
 
 <?php
@@ -29,72 +29,119 @@ try
   // SQL-kielinen hakukysely. Haetaan get metodilla sivulla olevan painikkeen antama arvo,
   // jonka perusteella switch functio määrittelee minkälainen kysely tehdään.
 
-  $kys = "";
+  $sql = "";
+  $last_thread = array();
 
-  switch ($_GET['kys']) {
+  switch ($_GET['order']) {
     case "Uusimmat ensin":
-      $kys = "SELECT message.messageID as id, 
+      $sql = "SELECT message.messageID as id, 
                     users.username as username, 
                     message.mess as mess, 
                     message.time as time, 
-                    message.date as date
+                    message.date as date,
+                    thread.threadID as thread
               FROM message 
               INNER JOIN users ON message.id = users.id
-              ORDER BY id asc";
+              INNER JOIN thread ON message.messageID = thread.messageID
+              WHERE parentStatus = TRUE
+              ORDER BY id asc;";
       break;
     case "Vanhimmat ensin":
-      $kys = "SELECT message.messageID as id, 
+      $sql = "SELECT message.messageID as id, 
                     users.username as username, 
                     message.mess as mess, 
                     message.time as time, 
-                    message.date as date
+                    message.date as date,
+                    thread.threadID as thread
               FROM message 
               INNER JOIN users ON message.id = users.id
-              ORDER BY id desc";
+              INNER JOIN thread ON message.messageID = thread.messageID
+              WHERE parentStatus = TRUE
+              ORDER BY id desc;";
       break;
     case "Kirjoittajan mukaan":
-      $kys = "SELECT message.messageID as id, 
+      $sql = "SELECT message.messageID as id, 
                     users.username as username, 
                     message.mess as mess, 
                     message.time as time, 
-                    message.date as date
+                    message.date as date,
+                    thread.threadID as thread
               FROM message 
               INNER JOIN users ON message.id = users.id
-              ORDER BY username asc";
+              INNER JOIN thread ON message.messageID = thread.messageID
+              WHERE parentStatus = TRUE
+              ORDER BY username asc;";
       break;
     default:
-      $kys = "SELECT message.messageID as id, 
-                     users.username as username, 
-                     message.mess as mess, 
-                     message.time as time, 
-                     message.date as date
+      $sql = "SELECT message.messageID as id, 
+                    users.username as username, 
+                    message.mess as mess, 
+                    message.time as time, 
+                    message.date as date,
+                    thread.threadID as thread
               FROM message 
               INNER JOIN users ON message.id = users.id
-              ORDER BY id asc";
+              INNER JOIN thread ON message.messageID = thread.messageID
+              WHERE parentStatus = TRUE
+              ORDER BY id asc;";
+
   }
-   // valmistellaan SQL-lause suoritusta varten
-   $lause = $pdo->prepare($kys);
 
-   // suorita hakukysely
-   $lause->execute();
+  $sqlThread = "SELECT message.messageID as id, 
+                      users.username as username, 
+                      message.mess as mess, 
+                      message.time as time, 
+                      message.date as date,
+                      thread.threadID as thread
+                FROM message 
+                INNER JOIN users ON message.id = users.id
+                INNER JOIN thread ON message.messageID = thread.messageID
+                WHERE parentStatus = FALSE AND thread.threadID = :thread
+                ORDER BY id asc;";
+    // valmistellaan SQL-lause suoritusta varten
+    $stmt1 = $pdo->prepare($sql);
+    $stmt2 = $pdo->prepare($sqlThread);
 
+    // suorita hakukysely
+    $stmt1->execute();
+    
+    // haetaan tulokset while-lauseessa
+    echo "<hr>";
+    while ( $output = $stmt1->fetchObject() ) {
+        // määritetään kunkin syklin viestiketjun threadID, sidotaan sen arvo stmt2 kyselyn ":thread" arvoon
+        // ja suoritetaan tietokantakysely
+        $thread = $output->thread;
+        $stmt2->bindValue(":thread", $thread);
+        $stmt2->execute();
 
-   // haetaan tulokset while-lauseessa
-   echo "<hr>";
-   while ( $tulos = $lause->fetchObject() )
-   {
-      echo "<font size=2><b>";
-      echo $tulos->username . "</b> kirjoitti ";
-      echo $tulos->date . " klo " . substr($tulos->time, 0, 8);
+        echo "<div class='thread'>";
+        echo "<font size=2><b>";
+        echo $output->username . "</b> kirjoitti ";
+        echo $output->date . " klo " . substr($output->time, 0, 8);
 
-      echo "</font><p><b>";
-      echo $tulos->mess;
-      echo "</b></p>";
-      echo "<button>Vastaa</button><button>Vastaa lainaten</button>";
-      echo "<HR>";
-   }
-   // suljetaan tietokantayhteys tuhoamalla yht-olio
-   unset($pdo);
+        echo "</font><p><b>";
+        echo $output->mess;
+        echo "</b></p>";
+        echo "<button>Vastaa</button><button>Vastaa lainaten</button>";
+        
+        
+        while ( $output2 = $stmt2->fetchObject() ) {
+          echo "<div class='reply'>";
+          echo "<font size=2><b>";
+          echo $output2->username . "</b> kirjoitti ";
+          echo $output2->date . " klo " . substr($output2->time, 0, 8);
+
+          echo "</font><p><b>";
+          echo $output2->mess;
+          echo "</b></p>";
+          echo "<button>Vastaa</button><button>Vastaa lainaten</button>";
+          echo "</div>";
+        }
+        echo "</div>";
+        echo "<HR>";
+    }
+    // suljetaan tietokantayhteys tuhoamalla yht-olio
+    unset($pdo);
 
 }
 
@@ -104,7 +151,7 @@ catch (PDOException $e)
    die;
 }
 
-include 'ala.php';
+include 'footer.php';
 
 ?>
 
