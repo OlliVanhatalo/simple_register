@@ -2,7 +2,7 @@
   
   // Määritellään tietokantayhteyden muodostamisessa
   // tarvittavat tiedot.
-  $dsn = "mysql:host=***;dbname=***;charset=utf8mb4";
+  $dsn = "mysql:host=localhost;dbname=ovanhata;charset=utf8mb4";
   $user = "";
   $pass = "";
   $options = [

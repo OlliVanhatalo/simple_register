@@ -44,6 +44,7 @@ CREATE TABLE message (
     id int NOT NULL,
     CONSTRAINT `fk_message_users`
       FOREIGN KEY (id) REFERENCES users (id),
+    quote int,
     mess  varchar(500) NOT NULL,
     time  time,
     date  date 
