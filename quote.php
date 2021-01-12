@@ -1,23 +1,28 @@
 <?php 
-  include "javascript.php";
+  // include "javascript.php";
+  echo "Nämä on quote.php:n sisällä<br>";
+  echo "thread2 = " . $thread . "<br>";
+  echo "messID2 = " . $id . "<br>";
 ?>
-  <!-- Button to reveal quote form -->
-  <div id="<?php echo $thread ?>button" style="display:block">
-    <button id="<?php echo $thread ?>quote">Vastaa lainaten</button>
-  </div>
 
+<!-- Button to reveal quote form -->
+    <div id='<?php echo $thread ?>button' style='display:block'>
+      <button id='<?php echo $thread ?>quote' onclick="revealQuoteForm()">Vastaa lainaten</button>
+    </div>
+  
   <!-- Quote form -->
-  <div id="<?php echo $thread ?>quote-form" style="display:none">
+  <p>Vastaa lainaten kenttä</p>
+  <div id="quote-form" style="display:block">
     <form  method=post action=addReply.php>
 
-      <input style='display:none' type='text' name='quote' value='<?php echo $$messID2 ?>'>
       <input style='display:none' type='text' name='thread' value='<?php echo $thread ?>'>
-      <textarea rows=3 cols=40 name=quote></textarea>
+      <input style='display:none' type='text' name='quote' value='<?php echo $id ?>'>
+      <textarea rows=3 cols=40 name=mess></textarea>
       <br><br>
       <input type=submit value='Lähetä'>
 
     </form>
   </div>
-
-  <!-- Cancel button hides revealed form -->
-  <button id="<?php echo $thread ?>cancel" style="display:none">Peruuta</button>
+  
+    <!-- Cancel button hides revealed form -->
+    <button id='<?php echo $thread ?>cancel' style='display:block' onclick='hideForm()'>Peruuta</button>

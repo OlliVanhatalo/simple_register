@@ -1,15 +1,27 @@
+.thread {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 1px;
+}
+
 .reply {
   display: flex;
   flex-direction: column;
   background-color: rgb(202, 194, 194);
   margin-left: 1.5rem;
+  /* border: 1px solid; */
+  border-radius: 5px;
+  /* margin: 1px; */
 }
 
 .quote {
   display: flex;
   flex-direction: column;
-  background-color: rgb(194, 185, 185);
+  background-color: rgba(134, 123, 123, 0.411);
   color: rgba(0, 0, 0, 0.80);
   font-size: 70%;
-  margin-left: 1.8rem;  
+  margin-left: 1.8rem;
+  /* border: 1px solid ; */
+  border-radius: 5px;
+  /* margin: 1px;   */
 }

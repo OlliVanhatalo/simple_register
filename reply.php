@@ -1,5 +1,8 @@
 <?php 
-  include "javascript.php";
+  // include "javascript.php";
+  echo "Nämä on reply.php:n sisällä<br>";
+  echo "thread = " . $thread . "<br>";
+  echo "messID = " . $id . "<br>";
 ?>
 
   <!-- Buttons to reveal either reply or quote form -->
@@ -9,11 +12,12 @@
   </div>
 
   <!-- Reply form -->
-  <div id="<?php echo $thread ?>reply-form" style="display:none">
+  <p>Vastaa kenttä</p>
+  <div id="reply-form" style="display:block">
     <form  method=post action=addReply.php>
 
       <input style='display:none' type='text' name='thread' value='<?php echo $thread ?>'>
-      <textarea rows=3 cols=40 name=reply></textarea>
+      <textarea rows=3 cols=40 name=mess></textarea>
       <br><br>
       <input type=submit value='Lähetä'>
 
@@ -21,12 +25,13 @@
   </div>
 
   <!-- Quote form -->
-  <div id="<?php echo $thread ?>quote-form" style="display:none">
+  <p>Vastaa lainaten kenttä</p>
+  <div id="quote-form" style="display:block">
     <form  method=post action=addReply.php>
 
-      <input style='display:none' type='text' name='quote' value='<?php echo $messID1 ?>'>
       <input style='display:none' type='text' name='thread' value='<?php echo $thread ?>'>
-      <textarea rows=3 cols=40 name=quote></textarea>
+      <input style='display:none' type='text' name='quote' value='<?php echo $id ?>'>
+      <textarea rows=3 cols=40 name=mess></textarea>
       <br><br>
       <input type=submit value='Lähetä'>
 
@@ -34,4 +39,4 @@
   </div>
 
   <!-- Cancel button hides any revealed form -->
-  <button id="<?php echo $thread ?>cancel" style="display:none" onclick="hideForm()">Peruuta</button>
+  <button id="<?php echo $thread ?>cancel" style="display:block" onclick="hideForm()">Peruuta</button>

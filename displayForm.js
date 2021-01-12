@@ -1,5 +1,3 @@
-<script>
-
   var buttons = document.getElementById("<?php echo $thread?>buttons");
   var replyForm = document.getElementById("<?php echo $thread?>reply-form");
   var quoteForm = document.getElementById("<?php echo $thread?>quote-form");
@@ -34,5 +32,3 @@
     quoteForm.style.display = "none";
     cancel.style.display = "none";
   }
-
-</script>

@@ -1,5 +1,6 @@
 <?php
 include 'header.php';
+include 'class.php';
 require_once "config.php";
 // include "./javascript.php";
 ?>
@@ -120,15 +121,15 @@ try
     $stmt1->execute();
     
     // haetaan tulokset while-lauseessa
-    echo "<hr>";
-    while ( $output = $stmt1->fetchObject() ) {
-        // määritetään kunkin syklin viestiketjun threadID, sidotaan sen arvo stmt2 kyselyn ":thread" arvoon
-        // ja suoritetaan tietokantakysely
-        echo "messageID = " . $messID1 = $output->id . "<br>";
-        $thread = $output->thread;
+    while ( $output = $stmt1->fetchObject() ) {  
+      // include 'contentBlock.php'; Tämä pois toistaiseksi. Tehdään componentiksi jos voi
 
-        echo "threadID = " . $thread . "<br>";
-        echo "quote = " . $output->quote . "<br>";
+      // määritetään kunkin syklin viestiketjun threadID, sidotaan sen arvo stmt2 kyselyn ":thread" arvoon
+        // ja suoritetaan tietokantakysely
+        $messID1 = $output->id;
+        $thread = $output->thread;
+        $quote = $output->quote;
+        $block = new messageBlock();
 
         $stmt2->bindValue(":thread", $thread);
         $stmt2->execute();
@@ -141,17 +142,15 @@ try
         echo "</font><p><b>";
         echo $output->mess;
         echo "</b></p>";
-        include 'reply.php';
+        echo $block->replyBlock($messID1, $thread);
 
         while ( $output2 = $stmt2->fetchObject() ) {
-          
-          $messID2 = $output2->id;
-          echo "messageID = " . $messID2 . "<br>";
 
+          $messID2 = $output2->id;
           $thread2 = $output2->thread;
-          echo "threadID = " . $thread2 . "<br>";
           $quote = $output2->quote;
-          echo "quote = " . $quote . "<br>";
+          $block = new messageBlock();
+
           $stmt3->bindValue(":quote", $quote);
 
           echo "<div class='reply'>";
@@ -165,11 +164,11 @@ try
             $output3 = $stmt3->fetchObject();
 
             echo "<div class='quote'>";
-            echo "<font size=1><b><q>";
-            echo $output3->username . "</b> vastasi ";
+            echo "<font size=1><b>";
+            echo $output3->username;
             echo $output3->date . " klo " . substr($output3->time, 0, 8);
   
-            echo "</font><p><b>";
+            echo "</font><p><b><q>";
             echo $output3->mess;
             echo "</q></b></p></div>";
             $stmt3->closeCursor();
@@ -178,14 +177,13 @@ try
           echo "</font><p><b>";
           echo $output2->mess;
           echo "</b></p>";
-          
-          include 'quote.php';
+          echo $block->quoteBlock($messID2, $thread2);
 
           echo "</div>";
         }
  
         echo "</div>";
-        echo "<HR>";
+   
     }
     // suljetaan tietokantayhteys tuhoamalla yht-olio
     unset($pdo);

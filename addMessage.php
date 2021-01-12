@@ -7,13 +7,9 @@ include 'consoleLog.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-   // hae data lomakkeelta
+   // hae data lomakkeelta ja kirjoittajan id sessiosta
    $mess = $_POST['mess'];
    $id = $_SESSION['id'];
-   $last_id = 40;
-   // $last_id = $pdo->lastInsertId();
-   $thread_id = $last_id;
-   
 
    try
    {
@@ -29,26 +25,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          // lisataan lomakkeella oleva viesti vieraskirjan loppuun
          $addMessage = "INSERT INTO message (id, mess, time, date)
                         VALUES (:id, :mess, now(), now());";
-         // $addMessage .= "SELECT LAST_INSERT_ID();";
-         // $addMessage .= "INSERT INTO thread (messageID, threadID, parentStatus)
-         //              VALUES (lastInsertId(), :threadID, TRUE);";
+
+         // lisätään edellä lisätty viesti myös ketju-tauluun käyttäen 
+         // session käyttäjän viimeisimpänä lähettämän viestin tietoja
+         $addThread = "INSERT INTO thread (messageID, threadID, parentStatus)
+                        VALUES ((SELECT LAST_INSERT_ID()), 
+                                 (SELECT LAST_INSERT_ID()), 
+                                 TRUE);";
 
          // valmistellaan SQL-lause suoritusta varten
          $stmt1  = $pdo->prepare($addMessage);
-         // $stmt2  = $pdo->prepare($addThread);
+         $stmt2  = $pdo->prepare($addThread);
 
+         // sidotaan lomakkeen sisältämä viesti ja sessioid 
+         // valmisteltuihin kyselyihin
          $stmt1->bindValue(":id", $id);
          $stmt1->bindValue(":mess", $mess);
-         // $stmt1->bindValue(":messageID", $last_id);
-         // $stmt1->bindValue(":threadID", $thread_id);
+         $stmt2->bindValue(":id", $id);
 
-         // suorita lis�yskysely
+         // suoritetaan kyselyt
          $stmt1->execute();
-         //tässä häikkää
-         // $last_id = $pdo->lastInsertId();
-         console_log($last_id);
-         //tämä ok
-         // $stmt2->execute();
+         $stmt2->execute();
       }
 
       // Suljetaan yhteys

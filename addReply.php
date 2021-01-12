@@ -7,10 +7,8 @@ include 'consoleLog.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
    // hae data lomakkeelta
-   $mess = $_POST['reply'];
+   $mess = $_POST['mess'];
    $id = $_SESSION['id'];
-   $last_id = 40;
-   // $last_id = $pdo->lastInsertId();
    $quote = $_POST['quote'];
    $thread_id = $_POST['thread'];
    
@@ -27,29 +25,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       {
 
          // lisataan lomakkeella oleva viesti vieraskirjan loppuun
-         $addReply = "INSERT INTO message (messageID, id, mess, time, date, quote)
-                        VALUES (50, :id, :mess, now(), now(), :quote);";
-         // $addReply .= "SELECT LAST_INSERT_ID();";
-         $addReply .= "INSERT INTO thread (messageID, threadID, parentStatus)
-         //              VALUES (lastInsertId(), :threadID, FALSE);";
+         $addReply = "INSERT INTO message (id, mess, time, date, quote)
+                        VALUES (:id, :mess, now(), now(), :quote);";
+         
+         // lisätään edellä lisätty viesti myös ketju-tauluun käyttäen 
+         // session käyttäjän viimeisimpänä lähettämän viestin tietoja
+         $addToThread = "INSERT INTO thread (messageID, threadID, parentStatus)
+                           VALUES ((SELECT LAST_INSERT_ID()), 
+                                    :threadID, 
+                                    FALSE);";
 
          // valmistellaan SQL-lause suoritusta varten
-         $stmt1  = $pdo->prepare($addMessage);
-         // $stmt2  = $pdo->prepare($addThread);
+         $stmt1  = $pdo->prepare($addReply);
+         $stmt2  = $pdo->prepare($addToThread);
 
          $stmt1->bindValue(":id", $id);
          $stmt1->bindValue(":mess", $mess);
-         // $stmt1->bindValue(":messageID", $last_id);
          $stmt1->bindValue(":quote", $quote);
-         $stmt1->bindValue(":threadID", $thread_id);
 
-         // suorita lis�yskysely
+         $stmt2->bindValue(":threadID", $thread_id);
+
+         // suoritetaan kyselyt
          $stmt1->execute();
-         //tässä häikkää
-         // $last_id = $pdo->lastInsertId();
-        
-         //tämä ok
-         // $stmt2->execute();
+         $stmt2->execute();
       }
 
       // Suljetaan yhteys
