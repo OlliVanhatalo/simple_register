@@ -15,8 +15,8 @@ require_once "config.php";
 
 
 <form method='get'>
-  <input type='submit' name='order' value='Uusimmat ensin'>
   <input type='submit' name='order' value='Vanhimmat ensin'>
+  <input type='submit' name='order' value='Uusimmat ensin'>
   <input type='submit' name='order' value='Kirjoittajan mukaan'>
 </form>
 
@@ -35,7 +35,7 @@ try
   $last_thread = array();
 
   switch ($_GET['order']) {
-    case "Uusimmat ensin":
+    case "Vanhimmat ensin":
       $sql = "SELECT message.messageID as id, 
                     users.username as username, 
                     message.mess as mess, 
@@ -48,7 +48,7 @@ try
               WHERE parentStatus = TRUE
               ORDER BY id asc;";
       break;
-    case "Vanhimmat ensin":
+    case "Uusimmat ensin":
       $sql = "SELECT message.messageID as id, 
                     users.username as username, 
                     message.mess as mess, 

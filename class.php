@@ -10,10 +10,13 @@ class messageBlock {
   }
 
   function replyBlock ($id, $thread) {
+
+    include 'displayFormJs.php';
     include 'reply.php';
   }
 
-  function quoteBlock ($id, $thread) {
+  function quoteBlock ($id2, $thread2) {
+    include 'displayFormJs.php';
     include 'quote.php';
   }
   

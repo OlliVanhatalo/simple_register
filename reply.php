@@ -1,19 +1,17 @@
 <?php 
-  // include "javascript.php";
-  echo "Nämä on reply.php:n sisällä<br>";
-  echo "thread = " . $thread . "<br>";
-  echo "messID = " . $id . "<br>";
+  // echo "Nämä on reply.php:n sisällä<br>";
+  // echo "thread = " . $thread . "<br>";
+  // echo "messID = " . $id . "<br>";
 ?>
 
   <!-- Buttons to reveal either reply or quote form -->
-  <div id="<?php echo $thread ?>buttons" style="display:block">
-    <button id="<?php echo $thread ?>reply" onclick="revealReplyForm()">Vastaa</button>
-    <button id="<?php echo $thread ?>quote" onclick="revealQuoteForm()">Vastaa lainaten</button>
+  <div id="<?php echo $id ?>buttons" style="display:block">
+    <button id="<?php echo $id ?>reply" onclick="revealReplyForm(<?php echo $id ?>)">Vastaa</button>
+    <button id="<?php echo $id ?>quote" onclick="revealQuoteForm(<?php echo $id ?>)">Vastaa lainaten</button>
   </div>
 
   <!-- Reply form -->
-  <p>Vastaa kenttä</p>
-  <div id="reply-form" style="display:block">
+  <div id="<?php echo $id ?>reply-form" style="display:none">
     <form  method=post action=addReply.php>
 
       <input style='display:none' type='text' name='thread' value='<?php echo $thread ?>'>
@@ -25,8 +23,7 @@
   </div>
 
   <!-- Quote form -->
-  <p>Vastaa lainaten kenttä</p>
-  <div id="quote-form" style="display:block">
+  <div id="<?php echo $id ?>quote-form" style="display:none">
     <form  method=post action=addReply.php>
 
       <input style='display:none' type='text' name='thread' value='<?php echo $thread ?>'>
@@ -39,4 +36,4 @@
   </div>
 
   <!-- Cancel button hides any revealed form -->
-  <button id="<?php echo $thread ?>cancel" style="display:block" onclick="hideForm()">Peruuta</button>
+  <button id="<?php echo $id ?>cancel" style="display:none" onclick="hideForm(<?php echo $id ?>)">Peruuta</button>
