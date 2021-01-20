@@ -1,5 +1,5 @@
 <script>
-
+  
   function revealReplyForm(threadNum) {
     console.log("reveal reply function triggered")
 

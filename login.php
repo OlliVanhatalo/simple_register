@@ -7,18 +7,15 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: index.php");
     exit;
 }
-
-//Tuodaan tietokantayhteyden luonti ja consoleLog tiedostot. 
   require_once "config.php";
   include "consoleLog.php";
 
-// Sanitoidaan kenttien syötteet ennen kuin tehdään serverikutsu
 $username = $password = "";
 $username_err = $password_err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  // Sanitointifunktio. Kaikki syötteet käyvät saman puhdistuspatteriston läpi
+  // Sanitation function
   function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -26,14 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return $data;
   }
   
-  // Tarkistetaan jos käyttäjätunnusta ei annettu
+  // Check if username was not given
   if(empty(test_input($_POST["username"]))){
     $username_err = "Syötä käyttäjätunnus.";
   } else{
     $username = test_input($_POST["username"]);
   }
 
-  // Tarkistetaan jos salasanaa ei annettu
+  // Check if password was not given
   if(empty(test_input($_POST["password"]))){
     $password_err = "Syötä salasana.";
   } else{
@@ -42,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Validate credentials
   if(empty($username_err) && empty($password_err)){
-    //Valmistellaan tietokantakysely
+    
     $sql = "SELECT id, username, password
             FROM users
             WHERE username = :username";
@@ -90,7 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
-  // Suljetaan yhteys
   unset($pdo);
 }
 ?>
@@ -101,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+  <link rel="stylesheet" href="content.css">
     <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }

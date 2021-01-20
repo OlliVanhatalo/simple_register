@@ -1,5 +1,6 @@
 <?php
-//Tämä funktio on debuggaamista varten. Mahdollistaa console.log() metodin käytön php:llä
+//This function is for debugging use. Makes possible to use
+//console.log()-function with PHP
 function console_log($output, $with_script_tags = true) {
     $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
 ');';

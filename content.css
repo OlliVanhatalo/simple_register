@@ -1,5 +1,49 @@
-.thread {
+.page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.form-control {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 0.4em;
+  border: 1px solid rgb(122, 122, 122);
+  border-radius: 5px;
+}
+
+.btn {
+  width: 10em;
+  /* border: 1px solid rgb(122, 122, 122); */
+  border: none;
+  box-shadow: 2px 2px 2.5px grey;
+  margin-bottom: 1em;
+  padding: 0.4em;
+  border-radius: 5px;
+  background-color: rgb(10, 116, 255, 0.726);
+  color: black;
+}
+
+.btn-warning, .btn-danger {
+  text-decoration: none;
+}
+
+.small-btn {
   border: 1px solid black;
+  border-radius: 5px;
+}
+
+.thread {
+  border: 1px solid rgb(122, 122, 122);
   border-radius: 5px;
   margin: 1px;
 }
@@ -7,9 +51,9 @@
 .reply {
   display: flex;
   flex-direction: column;
-  background-color: rgb(202, 194, 194);
+  background-color: rgba(10, 116, 255, 0.726);
   margin-left: 1.5rem;
-  /* border: 1px solid; */
+  border-bottom: 0.5px dotted rgb(228, 228, 228);
   border-radius: 5px;
   /* margin: 1px; */
 }
@@ -17,11 +61,11 @@
 .quote {
   display: flex;
   flex-direction: column;
-  background-color: rgba(134, 123, 123, 0.411);
+  background-color:  rgba(195, 202, 216, 0.342);
   color: rgba(0, 0, 0, 0.80);
-  font-size: 70%;
-  margin-left: 1.8rem;
-  /* border: 1px solid ; */
+  font-size: 95%;
+  margin-left: 1rem;
+  border-bottom: 0.5px dotted rgb(228, 228, 228);
   border-radius: 5px;
-  /* margin: 1px;   */
+  z-index: 10;
 }
