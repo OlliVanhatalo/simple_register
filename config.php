@@ -1,6 +1,6 @@
 <?php
   // Determine values needed for pdo-connection and open connection
-  $dsn = "mysql:host=localhost;dbname=ovanhata;charset=utf8mb4";
+  $dsn = "";
   $user = "";
   $pass = "";
   $options = [
